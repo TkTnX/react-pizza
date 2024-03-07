@@ -1,9 +1,15 @@
 import React, { useState } from "react";
 import "./_sort.scss";
-export const Sort = () => {
-  const [isActiveSort, setIsActiveSort] = useState(0);
+export const Sort = ({ isActiveSort, onClickSort }) => {
   const [openPopup, setOpenPopup] = useState(false);
-  const sortList = ["популярности", "цене", "алфавиту"];
+  const sortList = [
+    { name: "популярности (↓)", sortProp: "-rating" },
+    { name: "популярности (↑)", sortProp: "rating" },
+    { name: "цене (↓)", sortProp: "-price" },
+    { name: "цене (↑)", sortProp: "price" },
+    { name: "алфавиту (↓)", sortProp: "-title" },
+    { name: "алфавиту (↑)", sortProp: "title" },
+  ];
 
   return (
     <div className="sort">
@@ -21,7 +27,7 @@ export const Sort = () => {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span>{sortList[isActiveSort]}</span>
+        <span>{isActiveSort.name}</span>
       </div>
       {openPopup && (
         <>
@@ -31,13 +37,15 @@ export const Sort = () => {
                 return (
                   <li
                     onClick={() => {
-                      setIsActiveSort(index);
+                      onClickSort(sort);
                       setOpenPopup(false);
                     }}
-                    key={sort}
-                    className={isActiveSort === index ? "active" : ""}
+                    key={index}
+                    className={
+                      isActiveSort.sortProp === sort.sortProp ? "active" : ""
+                    }
                   >
-                    {sort}
+                    {sort.name}
                   </li>
                 );
               })}

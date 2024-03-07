@@ -1,8 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import "./_categories.scss";
-export const Categories = () => {
-  const [isActive, setIsActive] = useState(0);
-
+export const Categories = ({ isActiveCategory, onClickCategory }) => {
   const categories = [
     "Все",
     "Мясные",
@@ -19,8 +17,8 @@ export const Categories = () => {
           return (
             <li
               key={index}
-              onClick={() => setIsActive(index)}
-              className={isActive === index ? "active" : ""}
+              onClick={() => onClickCategory(index)}
+              className={isActiveCategory === index ? "active" : ""}
             >
               {item}
             </li>

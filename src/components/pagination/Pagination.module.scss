@@ -1,0 +1,37 @@
+.root {
+  :global {
+    display: flex;
+    gap: 50px;
+
+    .selected {
+      border-radius: 20px;
+      transition: all 0.2s ease-in;
+
+      background-color: orange;
+      a {
+        display: inline-block;
+        color: #fff;
+        cursor: pointer;
+        border: 1px solid orange;
+        padding: 10px 20px;
+      }
+    }
+
+    li {
+      a {
+        cursor: pointer;
+        border: 1px solid orange;
+        padding: 10px 20px;
+        border-radius: 20px;
+        transition: all 0.2s ease-in;
+        color: orange;
+        transition: all 0.2s ease-in;
+        &:hover {
+          background-color: orange;
+
+          color: #fff;
+        }
+      }
+    }
+  }
+}
