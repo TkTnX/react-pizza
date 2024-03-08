@@ -1,15 +1,22 @@
 import React, { useState } from "react";
 import "./_sort.scss";
-export const Sort = ({ isActiveSort, onClickSort }) => {
+import { useDispatch, useSelector } from "react-redux";
+import { setSortId } from "../../redux/slices/filterSlice";
+
+const sortList = [
+  { name: "популярности (↓)", sortProp: "-rating" },
+  { name: "популярности (↑)", sortProp: "rating" },
+  { name: "цене (↓)", sortProp: "-price" },
+  { name: "цене (↑)", sortProp: "price" },
+  { name: "алфавиту (↓)", sortProp: "-title" },
+  { name: "алфавиту (↑)", sortProp: "title" },
+];
+
+export const Sort = () => {
+  const dispatch = useDispatch();
+  const sortId = useSelector((state) => state.filter.sort);
+
   const [openPopup, setOpenPopup] = useState(false);
-  const sortList = [
-    { name: "популярности (↓)", sortProp: "-rating" },
-    { name: "популярности (↑)", sortProp: "rating" },
-    { name: "цене (↓)", sortProp: "-price" },
-    { name: "цене (↑)", sortProp: "price" },
-    { name: "алфавиту (↓)", sortProp: "-title" },
-    { name: "алфавиту (↑)", sortProp: "title" },
-  ];
 
   return (
     <div className="sort">
@@ -27,7 +34,7 @@ export const Sort = ({ isActiveSort, onClickSort }) => {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span>{isActiveSort.name}</span>
+        <span>{sortId.name}</span>
       </div>
       {openPopup && (
         <>
@@ -37,12 +44,12 @@ export const Sort = ({ isActiveSort, onClickSort }) => {
                 return (
                   <li
                     onClick={() => {
-                      onClickSort(sort);
+                      dispatch(setSortId(sort));
                       setOpenPopup(false);
                     }}
                     key={index}
                     className={
-                      isActiveSort.sortProp === sort.sortProp ? "active" : ""
+                      sortId.sortProp === sort.sortProp ? "active" : ""
                     }
                   >
                     {sort.name}

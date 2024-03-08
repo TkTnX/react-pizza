@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { setCategoryId, setCurrentPage } from "../redux/slices/filterSlice";
+
 import { PizzaBlock } from "./../components/PizzaBlock/PizzaBlock";
 import { Categories } from "./../components/categories/Categories";
 import { Sort } from "./../components/sort/Sort";
@@ -7,25 +10,27 @@ import { Skeleton } from "./../components/PizzaBlock/Skeleton";
 import { Pagination } from "../components/pagination/Pagination";
 import { SearchContext } from "../App";
 
-
 export const Home = () => {
-  const {searchValue} = useContext(SearchContext)
+  const { categoryId, sort, currentPage } = useSelector(
+    (state) => state.filter
+  );
+  const sortType = sort.sortProp;
+
+  const dispatch = useDispatch();
+
+  const { searchValue } = useContext(SearchContext);
   const [pizzas, setPizzas] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isActiveSort, setIsActiveSort] = useState({
-    name: "популярности (↑)",
-    sortProp: "rating",
-  });
-  const [isActiveCategory, setIsActiveCategory] = useState(0);
+  const [pageData, setPageData] = useState({});
 
-  const category = isActiveCategory > 0 ? `category=${isActiveCategory}` : "";
+  const category = categoryId > 0 ? `category=${categoryId}` : "";
 
   useEffect(() => {
     async function fetchData() {
       setIsLoading(true);
       const pizzaArr = await axios
         .get(
-          `https://82322d706a51e4fa.mokky.dev/pizzas?${category}&sortBy=${isActiveSort.sortProp}`
+          `https://82322d706a51e4fa.mokky.dev/pizzas?&limit=4&page=${currentPage}&${category}&sortBy=${sortType}`
         )
         .catch((err) => {
           console.warn(err);
@@ -35,24 +40,23 @@ export const Home = () => {
           setIsLoading(false);
         });
 
-      setPizzas(pizzaArr.data);
+      const totalPages = pizzaArr.data.meta.total_pages;
+      setPageData(totalPages);
+      setPizzas(pizzaArr.data.items);
     }
 
     fetchData();
     window.scrollTo(0, 0);
-  }, [isActiveCategory, isActiveSort, searchValue]);
+  }, [categoryId, sortType, searchValue, currentPage]);
 
   return (
     <>
       <div className="content__top">
         <Categories
-          isActiveCategory={isActiveCategory}
-          onClickCategory={(i) => setIsActiveCategory(i)}
+          isActiveCategory={categoryId}
+          onClickCategory={(i) => dispatch(setCategoryId(i))}
         />
-        <Sort
-          isActiveSort={isActiveSort}
-          onClickSort={(i) => setIsActiveSort(i)}
-        />
+        <Sort />
       </div>
       <h2 className="content__title">Все пиццы</h2>
       {isLoading && <h2>Загрузка...</h2>}
@@ -66,7 +70,11 @@ export const Home = () => {
               )
               .map((value) => <PizzaBlock key={value.id} {...value} />)}
       </ul>
-      <Pagination />
+      <Pagination
+        currentPage={currentPage}
+        pageData={pageData}
+        onChange={(num) => dispatch(setCurrentPage(num))}
+      />
     </>
   );
 };

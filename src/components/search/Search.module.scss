@@ -1,8 +1,20 @@
 .root {
-  position: relative;
   border: 1px solid rgba(0, 0, 0, 0.1);
-  padding: 12px 20px;
   border-radius: 15px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
 
+.input {
+  padding: 12px 20px;
+  border: none;
   font-size: 16px;
+}
+
+.iconX {
+  width: 18px;
+  height: 18px;
+  margin-right: 10px;
+  cursor: pointer;
 }

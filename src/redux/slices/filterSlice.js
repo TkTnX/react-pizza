@@ -1,11 +1,28 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { inpVal } from "../../App";
-export const test = createSlice({
-  name: "test",
-  initialState: {},
-  reducers: {},
+
+export const filterSlice = createSlice({
+  name: "filter",
+  initialState: {
+    categoryId: 0,
+    sort: {
+      name: "популярности (↑)",
+      sortProp: "rating",
+    },
+    currentPage: 1,
+  },
+  reducers: {
+    setCategoryId: (state, action) => {
+      state.categoryId = action.payload;
+    },
+    setSortId: (state, action) => {
+      state.sort = action.payload;
+    },
+    setCurrentPage: (state, action) => {
+      state.currentPage = action.payload;
+    },
+  },
 });
 
-export const {} = test.actions;
+export const { setCategoryId, setSortId, setCurrentPage } = filterSlice.actions;
 
-export default test.reducer;
+export default filterSlice.reducer;
