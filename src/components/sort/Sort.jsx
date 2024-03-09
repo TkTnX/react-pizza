@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./_sort.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { setSortId } from "../../redux/slices/filterSlice";
@@ -18,8 +18,22 @@ export const Sort = () => {
 
   const [openPopup, setOpenPopup] = useState(false);
 
+  const sortRef = useRef(null);
+
+  useEffect(() => {
+    const onClickClose = (event) => {
+      if (!event.composedPath().includes(sortRef.current)) {
+        setOpenPopup(false);
+      }
+    };
+
+    document.body.addEventListener("click", onClickClose);
+
+    return () => document.body.removeEventListener("click", onClickClose);
+  }, []);
+
   return (
-    <div className="sort">
+    <div ref={sortRef} className="sort">
       <div className="sort__label" onClick={() => setOpenPopup(!openPopup)}>
         <svg
           width="10"
