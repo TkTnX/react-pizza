@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const filterSlice = createSlice({
   name: "filter",
   initialState: {
+    searchValue: "",
     categoryId: 0,
     sort: {
       name: "популярности (↑)",
@@ -11,6 +12,9 @@ export const filterSlice = createSlice({
     currentPage: 1,
   },
   reducers: {
+    setSearchValue: (state, action) => {
+      state.searchValue = action.payload;
+    },
     setCategoryId: (state, action) => {
       state.categoryId = action.payload;
     },
@@ -23,6 +27,10 @@ export const filterSlice = createSlice({
   },
 });
 
-export const { setCategoryId, setSortId, setCurrentPage } = filterSlice.actions;
+export const selectFilter = (state) => state.filter;
+export const selectFilterSort = (state) => state.filter.sort;
+
+export const { setCategoryId, setSortId, setCurrentPage, setSearchValue } =
+  filterSlice.actions;
 
 export default filterSlice.reducer;
