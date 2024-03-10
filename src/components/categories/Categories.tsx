@@ -1,6 +1,15 @@
 import React from "react";
 import "./_categories.scss";
-export const Categories = ({ isActiveCategory, onClickCategory }) => {
+
+type CategoriesProps = {
+  isActiveCategory: number;
+  onClickCategory: any;
+};
+
+export const Categories: React.FC<CategoriesProps> = ({
+  isActiveCategory,
+  onClickCategory,
+}) => {
   const categories = [
     "Все",
     "Мясные",

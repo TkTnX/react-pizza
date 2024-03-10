@@ -32,15 +32,6 @@ export const cartSlice = createSlice({
 
       if (findItem) {
         findItem.count--;
-      } else {
-        state.products.push({
-          ...action.payload,
-          count: 1,
-        });
-      }
-
-      if (findItem.count <= 0) {
-        state.products.splice(findItem, 1);
       }
     },
 
