@@ -4,7 +4,7 @@
 
 Мой тренировочный проект где я использую новые для себя технологии, такеие, как: TypeScript и Redux Toolkit.
 
-# React + Vite
+### React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
