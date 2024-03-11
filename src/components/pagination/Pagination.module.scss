@@ -1,6 +1,7 @@
 .root {
   :global {
     display: flex;
+    flex-wrap: wrap;
     gap: 50px;
 
     .selected {

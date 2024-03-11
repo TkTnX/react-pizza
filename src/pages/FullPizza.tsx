@@ -33,7 +33,7 @@ export const FullPizza: React.FC = () => {
   }
 
   return (
-    <div className="container">
+    <div className="container fullPizza">
       <img src={pizza.imageUrl} />
       <h2>{pizza.title}</h2>
 

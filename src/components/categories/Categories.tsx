@@ -1,39 +1,37 @@
-import React from "react";
+import React, { memo } from "react";
 import "./_categories.scss";
-
 type CategoriesProps = {
   isActiveCategory: number;
-  onClickCategory: any;
+  onClickCategory: (index: number) => void;
 };
 
-export const Categories: React.FC<CategoriesProps> = ({
-  isActiveCategory,
-  onClickCategory,
-}) => {
-  const categories = [
-    "Все",
-    "Мясные",
-    "Вегетарианская",
-    "Гриль",
-    "Острые",
-    "Закрытые",
-  ];
+const categories = [
+  "Все",
+  "Мясные",
+  "Вегетарианская",
+  "Гриль",
+  "Острые",
+  "Закрытые",
+];
 
-  return (
-    <div className="categories">
-      <ul>
-        {categories.map((item, index) => {
-          return (
-            <li
-              key={index}
-              onClick={() => onClickCategory(index)}
-              className={isActiveCategory === index ? "active" : ""}
-            >
-              {item}
-            </li>
-          );
-        })}
-      </ul>
-    </div>
-  );
-};
+export const Categories: React.FC<CategoriesProps> = memo(
+  ({ isActiveCategory, onClickCategory }) => {
+    return (
+      <div className="categories">
+        <ul>
+          {categories.map((item, index) => {
+            return (
+              <li
+                key={index}
+                onClick={() => onClickCategory(index)}
+                className={isActiveCategory === index ? "active" : ""}
+              >
+                {item}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    );
+  }
+);

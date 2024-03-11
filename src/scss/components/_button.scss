@@ -147,3 +147,12 @@
     }
   }
 }
+
+.btn-disabled {
+  opacity: 0.2;
+  transition: all 0.2s ease-in;
+
+  &:hover {
+    background-color: #fff;
+  }
+}

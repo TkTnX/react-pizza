@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from "react";
-import { setSearchValue } from "../../redux/slices/filterSlice.js";
+import { setSearchValue } from "../../redux/slices/filterSlice.ts";
 import debounce from "lodash.debounce";
 import styles from "./Search.module.scss";
 import { useDispatch } from "react-redux";
@@ -17,14 +17,15 @@ export const Search: React.FC = () => {
     []
   );
 
-  const onClickClearInp = () => {
+  const onClickClearInp = (event: React.MouseEvent<SVGSVGElement>) => {
+    console.log(event);
     inputRef.current?.focus();
 
     dispatch(setSearchValue(""));
     setValue("");
   };
 
-  const onChangeInp = (e: any) => {
+  const onChangeInp = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChangeTimeOut(e.target.value);
     setValue(e.target.value);
   };

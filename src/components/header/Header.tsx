@@ -5,7 +5,7 @@ import { Link, useLocation } from "react-router-dom";
 import logo from "./pizza-logo.svg";
 import "./_header.scss";
 import { Search } from "../search/Search.tsx";
-import { selectCart } from "../../redux/slices/cartSlice.js";
+import { selectCart } from "../../redux/slices/cartSlice.ts";
 
 export const Header: React.FC = () => {
   const { products, totalPrice } = useSelector(selectCart);
@@ -28,7 +28,7 @@ export const Header: React.FC = () => {
             </div>
           </div>
         </Link>
-        <Search />
+        {location.pathname !== "/cart" && <Search />}
         {location.pathname !== "/cart" && (
           <div className="header__cart">
             <Link to="/cart" className="button button--cart">

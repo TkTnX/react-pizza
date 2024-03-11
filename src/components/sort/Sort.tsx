@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 import "./_sort.scss";
-import { useDispatch, useSelector } from "react-redux";
-import { selectFilterSort, setSortId } from "../../redux/slices/filterSlice.js";
+import { useDispatch } from "react-redux";
+import { filterSliceType, setSortId } from "../../redux/slices/filterSlice.ts";
 
 type SortType = {
   name: string;
@@ -17,20 +17,19 @@ const sortList: SortType = [
   { name: "алфавиту (↑)", sortProp: "title" },
 ];
 
-export const Sort: React.FC = () => {
+type SortPopup = {
+  value: filterSliceType;
+};
+
+export const Sort: React.FC<SortPopup> = memo(({ value }) => {
   const dispatch = useDispatch();
-  const sortId: {
-    name: string;
-    sortProp: string;
-  } = useSelector(selectFilterSort);
 
   const [openPopup, setOpenPopup] = useState<Boolean>(false);
-
   const sortRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const onClickClose = (event: any) => {
-      if (!event.composedPath().includes(sortRef.current)) {
+    const onClickClose = (event: MouseEvent) => {
+      if (sortRef.current && !event.composedPath().includes(sortRef.current)) {
         setOpenPopup(false);
       }
     };
@@ -56,7 +55,7 @@ export const Sort: React.FC = () => {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span>{sortId.name}</span>
+        <span>{value.name}</span>
       </div>
       {openPopup && (
         <>
@@ -70,9 +69,7 @@ export const Sort: React.FC = () => {
                       setOpenPopup(false);
                     }}
                     key={index}
-                    className={
-                      sortId.sortProp === sort.sortProp ? "active" : ""
-                    }
+                    className={value.sortProp === sort.sortProp ? "active" : ""}
                   >
                     {sort.name}
                   </li>
@@ -84,4 +81,4 @@ export const Sort: React.FC = () => {
       )}
     </div>
   );
-};
+});

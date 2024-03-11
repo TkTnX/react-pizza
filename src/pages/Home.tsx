@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useCallback, useEffect } from "react";
+import { useSelector } from "react-redux";
 import {
   selectFilter,
   setCategoryId,
@@ -11,7 +11,8 @@ import { Categories } from "../components/categories/Categories.tsx";
 import { Sort } from "../components/sort/Sort.tsx";
 import { Skeleton } from "../components/PizzaBlock/Skeleton.tsx";
 import { Pagination } from "../components/pagination/Pagination.tsx";
-import { fetchPizzas, selectPizza } from "../redux/slices/pizzaSlice.js";
+import { fetchPizzas, selectPizza } from "../redux/slices/pizzaSlice.ts";
+import { useAppDispatch } from "../redux/store.ts";
 
 export const Home: React.FC = () => {
   const { categoryId, sort, currentPage, searchValue } =
@@ -20,7 +21,7 @@ export const Home: React.FC = () => {
 
   const { items, status } = useSelector(selectPizza);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const category = categoryId > 0 ? `category=${categoryId}` : "";
 
@@ -30,7 +31,7 @@ export const Home: React.FC = () => {
         fetchPizzas({
           category,
           sortType,
-          currentPage,
+          currentPage: String(currentPage),
         })
       );
     }
@@ -38,18 +39,37 @@ export const Home: React.FC = () => {
     fetchData();
     window.scrollTo(0, 0);
   }, [categoryId, sortType, searchValue, currentPage]);
+
+  const onClickCategory = useCallback(
+    (i: number) => dispatch(setCategoryId(i)),
+    []
+  );
+
+  const itemsFiltered = items.filter((value: any) =>
+    value.title.toLowerCase().includes(searchValue.toLowerCase())
+  );
+
   return (
     <>
       <div className="content__top">
         <Categories
           isActiveCategory={categoryId}
-          onClickCategory={(i: number) => dispatch(setCategoryId(i))}
+          onClickCategory={onClickCategory}
         />
-        <Sort />
+        <Sort value={sort} />
       </div>
 
       <h2 className="content__title">Все пиццы</h2>
       {status === "loading" && <h2>Загрузка...</h2>}
+      {itemsFiltered.length === 0 && (
+        <div className="container not-found">
+          <h2 className="not-found__title">Пицца не найдена!😖</h2>
+          <p className="not-found__desc">
+            Похоже, по вашему запросу не нашлось пицц! Попробуйте найти что-то
+            другое :)
+          </p>
+        </div>
+      )}
       {status === "error" ? (
         <div className="content__error-info">
           <h2>Пиццы не найдены! 😕</h2>
@@ -61,11 +81,9 @@ export const Home: React.FC = () => {
         <ul className="content__items">
           {status === "loading"
             ? [...new Array(10)].map((_, index) => <Skeleton key={index} />)
-            : items
-                .filter((value: any) =>
-                  value.title.toLowerCase().includes(searchValue.toLowerCase())
-                )
-                .map((value: any) => <PizzaBlock key={value.id} {...value} />)}
+            : itemsFiltered.map((value: any) => (
+                <PizzaBlock key={value.id} {...value} />
+              ))}
         </ul>
       )}
 

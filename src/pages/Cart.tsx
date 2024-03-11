@@ -6,7 +6,7 @@ import {
   clearProducts,
   selectCart,
   selectCartProducts,
-} from "../redux/slices/cartSlice.js";
+} from "../redux/slices/cartSlice.ts";
 import { CartEmpty } from "../components/cartEmpty/CartEmpty.tsx";
 
 export const Cart: React.FC = () => {
