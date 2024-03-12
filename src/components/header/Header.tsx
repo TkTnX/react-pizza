@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 
@@ -15,6 +15,14 @@ export const Header: React.FC = () => {
     (sum: number, item: any) => sum + item.count,
     0
   );
+
+  useEffect(() => {
+    const json = JSON.stringify(products);
+
+    if (products.length !== 0) {
+      localStorage.setItem("cartProduct", json);
+    }
+  }, [products]);
 
   return (
     <div className="header">
